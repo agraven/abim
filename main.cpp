@@ -4,8 +4,21 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <thread>
+#include "shader/fragment-shader.h"
+#include "shader/vertex-shader.h"
+
 GLFWwindow* window;
 const GLFWvidmode* videomode;
+GLuint fragmentShader, vertexShader;
+GLint positionAttributes;
+GLuint shaderProgram;
+GLuint vertexArrayObject;
+GLuint vertexBufferObject;
+float vertices[] = {
+	0.0f, 0.5f,
+	0.5f, -0.5f,
+	-0.5f, -0.5f
+};
 
 void init() {
 	glfwInit();
@@ -23,8 +36,42 @@ void init() {
 		fprintf(stderr, PACKAGE ": Fatal error: could not create window\n");
 		exit(1);
 	}
-	
 	glfwMakeContextCurrent(window);
+
+	glewExperimental = GL_TRUE;
+	glewInit();
+
+	// Store attribute links in vertex array object
+	glGenVertexArrays(1, &vertexArrayObject);
+	glBindVertexArray(vertexArrayObject);
+
+	glGenBuffers(1, &vertexBufferObject);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// Compile vertex and fragment shaders
+	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertexShader, 1, &vertex_shader_src, NULL);
+	glCompileShader(vertexShader);
+
+	GLint status;
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
+	
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShader, 1, &fragment_shader_src, NULL);
+	glCompileShader(fragmentShader);
+
+	shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	glBindFragDataLocation(shaderProgram, 0, "outColor");
+	glLinkProgram(shaderProgram);
+	glUseProgram(shaderProgram);
+
+	// Linking vertex data with attributes
+	GLint positionAttributes = glGetAttribLocation(shaderProgram, "position");
+	glVertexAttribPointer(positionAttributes, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(positionAttributes);
 }
 
 void close() {
@@ -38,6 +85,7 @@ int main(int argc, char* argv[]) {
 	while(!glfwWindowShouldClose(window)) {
 		// Rendering
 		glClear(GL_COLOR_BUFFER_BIT);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glfwSwapBuffers(window);
 
 		// Event handling
