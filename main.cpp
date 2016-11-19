@@ -75,6 +75,12 @@ void init() {
 }
 
 void close() {
+	glDeleteProgram(shaderProgram);
+	glDeleteShader(fragmentShader);
+	glDeleteShader(vertexShader);
+	glDeleteBuffers(1, &vertexBufferObject);
+	glDeleteVertexArrays(1, &vertexArrayObject);
+
 	glfwTerminate();
 }
 
