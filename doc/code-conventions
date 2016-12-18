@@ -1,0 +1,19 @@
+Variable names should be lower case, with words separated by underscores.
+Functions should be named the same way as variables.
+An exception applies when dealing with OpenGL: Instead, camel case should be used, with the first letter of the second word and onwards being capitalized.
+Class names should be camel case, with the first letter of every word being capitalized.
+Conditionals should be separated from the keyword they belong to with a single space.
+Opening curly brackets should be on the same line as the keyword they belong to, separated by a single space.
+Closing curly brackets should be on their own line, with the same indentation as the line of the matching curly bracket, unless the next keyword is else, in which case the else should be on the same line, separated by a space.
+
+Example:
+void function_name() {
+	int some_number = 2;
+	if (some_number < 3) {
+		do_stuff(some_number, other_value);	
+	} else {
+		glStuff(someShader);
+	}
+}
+class ClassyName {
+};

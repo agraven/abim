@@ -1,0 +1,6 @@
+* rework how textures are loaded
+* add wrapper function for handling filenames
+* maybe rework objects to have list of points rather than position and size
+* implement physics
+* distinguish static/level object and moving objects
+* implement world backgrounds

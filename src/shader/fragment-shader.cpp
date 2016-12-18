@@ -1,8 +1,13 @@
 #include "shader/fragment-shader.h"
 const GLchar* fragment_shader_src = GLSL(
+	in vec4 Color;
+	in vec2 Texcoord;
+
 	out vec4 outColor;
 
+	uniform sampler2D tex;
+
 	void main() {
-		outColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		outColor = texture(tex, Texcoord) * vec4(Color);
 	}
 );
