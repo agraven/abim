@@ -8,8 +8,8 @@
 int main(int argc, char* argv[]) {
 	init();
 	World* world = new World();
-	world->object_add(new Object(2.0f, 2.0f, 20.0f, 20.0f, (const char*) "splash.png"));
-	world->object_add(new Object(50.0f, 200.0f, 20.0f, 20.0f, (const char*)"splash.png"));
+	world->object_add(new Object(2.0f, 2.0f, 20.0f, 20.0f, "splash.png"));
+	world->object_add(new Object(50.0f, 200.0f, 20.0f, 20.0f, "splash.png"));
 
 	// Main loop
 	while(!glfwWindowShouldClose(window)) {

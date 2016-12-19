@@ -39,10 +39,10 @@ void init() {
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	videomode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	horz_pixel_step = 1.0f / videomode->width;
-	vert_pixel_step = 1.0f / videomode->height;
-	//window = glfwCreateWindow(800, 600, "OpenGL", nullptr, nullptr); // Windowed
-	window = glfwCreateWindow(videomode->width, videomode->height, PACKAGE_NAME, glfwGetPrimaryMonitor(), nullptr); // Fullscreen
+	horz_pixel_step = 2.0f / videomode->width;
+	vert_pixel_step = 2.0f / videomode->height;
+	window = glfwCreateWindow(1024, 768, "OpenGL", nullptr, nullptr); // Windowed
+	//window = glfwCreateWindow(videomode->width, videomode->height, PACKAGE_NAME, glfwGetPrimaryMonitor(), nullptr); // Fullscreen
 	if (!window) {
 		fprintf(stderr, PACKAGE ": Fatal error: could not create window\n");
 		exit(1);
@@ -56,11 +56,12 @@ void init() {
 	videomode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	imgdata = SOIL_load_image("splash.png", &width, &height, 0, SOIL_LOAD_RGB);
 	float vertices[] = { // Format: x, y, red, green, blue, alpha, tex-x, tex-y
-		(videomode->width - width) / 2.0f / videomode->width, (videomode->height - height) / 2.0f * vert_pixel_step, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, // Top-left
-		(videomode->width + width) / 2.0f / videomode->width, (videomode->height - height) / 2.0f * vert_pixel_step, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Top-right
-		(videomode->width + width) / 2.0f / videomode->width, (videomode->height + height) / 2.0f * vert_pixel_step, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // Top-right
-		(videomode->width - width) / 2.0f / videomode->width, (videomode->height + height) / 2.0f * vert_pixel_step, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f  // Top-right
+		((videomode->width - width) / 2.0f) * horz_pixel_step - 1.0f, ((videomode->height - height) / 2.0f) * vert_pixel_step - 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, // Top-left
+		((videomode->width + width) / 2.0f) * horz_pixel_step - 1.0f, ((videomode->height - height) / 2.0f) * vert_pixel_step - 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Top-right
+		((videomode->width + width) / 2.0f) * horz_pixel_step - 1.0f, ((videomode->height + height) / 2.0f) * vert_pixel_step - 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // Top-right
+		((videomode->width - width) / 2.0f) * horz_pixel_step - 1.0f, ((videomode->height + height) / 2.0f) * vert_pixel_step - 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f  // Top-right
 	};
+	//printf("%f, %f, %f, %f\n", vertices[0], vertices[1], vertices[8], vertices[9]);
 
 	// Store attribute links in vertex array object
 	glGenVertexArrays(1, &vertexArrayObject);
