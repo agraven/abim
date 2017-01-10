@@ -39,10 +39,10 @@ void init() {
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	videomode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	horz_pixel_step = 1.0f / videomode->width;
-	vert_pixel_step = 1.0f / videomode->height;
-	//window = glfwCreateWindow(800, 600, "OpenGL", nullptr, nullptr); // Windowed
-	window = glfwCreateWindow(videomode->width, videomode->height, PACKAGE_NAME, glfwGetPrimaryMonitor(), nullptr); // Fullscreen
+	horz_pixel_step = 2.0f / videomode->width;
+	vert_pixel_step = 2.0f / videomode->height;
+	window = glfwCreateWindow(1024, 768, "OpenGL", nullptr, nullptr); // Windowed
+	//window = glfwCreateWindow(videomode->width, videomode->height, PACKAGE_NAME, glfwGetPrimaryMonitor(), nullptr); // Fullscreen
 	if (!window) {
 		fprintf(stderr, PACKAGE ": Fatal error: could not create window\n");
 		exit(1);

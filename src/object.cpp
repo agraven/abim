@@ -13,10 +13,11 @@ Object::Object(float init_x, float init_y, float init_width, float init_height, 
 void Object::update() {
 }
 void Object::render(point camera) {
-	float x1 = (x - camera.x) * horz_pixel_step;
-	float x2 = (x + width - camera.x) * horz_pixel_step;
-	float y1 = (y - camera.y) * vert_pixel_step;
-	float y2 = (y + width - camera.y) * vert_pixel_step;
+	float x1 = (x - camera.x) * horz_pixel_step - 1.0f;
+	float x2 = (x - camera.x + width) * horz_pixel_step - 1.0f;
+	float y1 = (y - camera.y) * vert_pixel_step - 1.0f;
+	float y2 = (y - camera.y + width) * vert_pixel_step - 1.0f;
+	printf("%f, %f, %f, %f\t", x1, x2, y1, y2);
 	float vertices[] = { // Format: x, y, red, green, blue, alpha, tex-x, tex-y
 		x1, y1, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Top-left
 		x2, y1, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, // Top-right
