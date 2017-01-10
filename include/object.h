@@ -5,7 +5,7 @@
 
 class Object {
 	public:
-		Object(float x = 0, float y = 0, float width = 0, float height = 0, const char* texture_filename = nullptr);
+		Object(float init_x, float init_y, float init_width, float init_height, const char* texture_filename);
 		Object* objlist_next = nullptr;
 		point position;
 		virtual void update();

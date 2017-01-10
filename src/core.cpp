@@ -51,16 +51,7 @@ void init() {
 
 	glewExperimental = GL_TRUE;
 	glewInit();
-	int width, height;
-	unsigned char* imgdata;
 	videomode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	imgdata = SOIL_load_image("splash.png", &width, &height, 0, SOIL_LOAD_RGB);
-	float vertices[] = { // Format: x, y, red, green, blue, alpha, tex-x, tex-y
-		(videomode->width - width) / 2.0f / videomode->width, (videomode->height - height) / 2.0f * vert_pixel_step, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, // Top-left
-		(videomode->width + width) / 2.0f / videomode->width, (videomode->height - height) / 2.0f * vert_pixel_step, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Top-right
-		(videomode->width + width) / 2.0f / videomode->width, (videomode->height + height) / 2.0f * vert_pixel_step, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // Top-right
-		(videomode->width - width) / 2.0f / videomode->width, (videomode->height + height) / 2.0f * vert_pixel_step, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f  // Top-right
-	};
 
 	// Store attribute links in vertex array object
 	glGenVertexArrays(1, &vertexArrayObject);
@@ -68,11 +59,9 @@ void init() {
 
 	glGenBuffers(1, &vertexBufferObject);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &elementBufferObject);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObject);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 
 	// Compile vertex and fragment shaders
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -103,22 +92,6 @@ void init() {
 	GLint textureAttributes = glGetAttribLocation(shaderProgram, "texcoord");
 	glEnableVertexAttribArray(textureAttributes);
 	glVertexAttribPointer(textureAttributes, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(6*sizeof(float)));
-
-	// Load texture
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	//int width, height;
-	//unsigned char* imgdata;
-	//imgdata = SOIL_load_image("splash.png", &width, &height, 0, SOIL_LOAD_RGB);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imgdata);
-	SOIL_free_image_data(imgdata);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
 
 void close() {

@@ -3,8 +3,12 @@
 #include <SOIL.h>
 #include "data-types.h"
 #include "core.h"
-Object::Object(float x, float y, float width, float height, const char* texture_filename) {
+Object::Object(float init_x, float init_y, float init_width, float init_height, const char* texture_filename) {
 	image_data = SOIL_load_image(texture_filename, &image_width, &image_height, 0, SOIL_LOAD_RGB);
+	x = init_x;
+	y = init_y;
+	width = init_width;
+	height = init_height;
 }
 void Object::update() {
 }
@@ -14,16 +18,16 @@ void Object::render(point camera) {
 	float y1 = (y - camera.y) * vert_pixel_step;
 	float y2 = (y + width - camera.y) * vert_pixel_step;
 	float vertices[] = { // Format: x, y, red, green, blue, alpha, tex-x, tex-y
-		x1, y1, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // Top-left
-		x2, y1, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Top-right
-		x2, y2, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, // Bottom-right
-		x1, y2, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f  // Bottom-left
+		x1, y1, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Top-left
+		x2, y1, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, // Top-right
+		x2, y2, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // Bottom-right
+		x1, y2, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f  // Bottom-left
 	};
 	/*float vertices[] = { // Format: x, y, red, green, blue, alpha, tex-x, tex-y
-		-0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // Top-left
-		0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Top-right
-		0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, // Bottom-right
-		-0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f  // Bottom-left
+		-0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Top-left
+		 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, // Top-right
+		 0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // Bottom-right
+		-0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f  // Bottom-left
 	};*/
 	GLuint elements[] = {
 		0, 1, 2,
