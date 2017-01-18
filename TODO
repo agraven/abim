@@ -1,6 +1,10 @@
-* rework how textures are loaded
+* fix/actually implement window-resizing
+* rework how textures are loaded, probably by implementing a key/value texture database
 * add wrapper function for handling filenames
+* add shortcut-functions for rendering simple geometry
+* distinguish static/scene object and moving objects
 * maybe rework objects to have list of points rather than position and size
-* implement physics
-* distinguish static/level object and moving objects
-* implement world backgrounds
+
+Long term:
+* implement menu toolkit
+* implement physics (using Box2D?)

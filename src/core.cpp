@@ -5,29 +5,25 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "core.h"
+#include "world.h"
 #include "shader/fragment-shader.h"
 #include "shader/vertex-shader.h"
 float horz_pixel_step, vert_pixel_step;
 
-GLFWwindow* window;
+GLFWwindow* a_window;
 const GLFWvidmode* videomode;
 GLuint fragmentShader, vertexShader;
-GLuint shaderProgram;
-GLuint vertexArrayObject;
-GLuint vertexBufferObject;
-GLuint elementBufferObject;
-GLuint texture;
-float vertices[] = { // Format: x, y, red, green, blue, alpha, tex-x, tex-y
-	 0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // Top-left
-	 0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Top-right
-	-0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, // Bottom-right
-	-0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f  // Bottom-left
-};
-GLuint elements[] = {
-	0, 1, 2,
-	2, 3, 0
-};
+GLuint a_shaderProgram;
 
+World* a_world;
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+     if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) a_world->objlist_first->x += 100;
+}
+
+void window_size_callback(GLFWwindow* window, int width, int height) {
+	glfwSetWindowSize(window, width, height);
+}
 
 void init() {
 	glfwInit();
@@ -36,32 +32,25 @@ void init() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
 	videomode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	horz_pixel_step = 2.0f / videomode->width;
 	vert_pixel_step = 2.0f / videomode->height;
-	window = glfwCreateWindow(1024, 768, "OpenGL", nullptr, nullptr); // Windowed
-	//window = glfwCreateWindow(videomode->width, videomode->height, PACKAGE_NAME, glfwGetPrimaryMonitor(), nullptr); // Fullscreen
-	if (!window) {
+	a_window = glfwCreateWindow(1024, 768, PACKAGE_STRING, nullptr, nullptr); // Windowed
+	//a_window = glfwCreateWindow(videomode->width, videomode->height, PACKAGE_NAME, glfwGetPrimaryMonitor(), nullptr); // Fullscreen
+	if (!a_window) {
 		fprintf(stderr, PACKAGE ": Fatal error: could not create window\n");
 		exit(1);
 	}
-	glfwMakeContextCurrent(window);
+	glfwSetWindowSizeLimits(a_window, 200, 200, GLFW_DONT_CARE, GLFW_DONT_CARE);
+	glfwMakeContextCurrent(a_window);
+	glfwSetKeyCallback(a_window, key_callback);
+	//glfwSetWindowSizeCallback(a_window, window_size_callback);
 
 	glewExperimental = GL_TRUE;
 	glewInit();
 	videomode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-	// Store attribute links in vertex array object
-	glGenVertexArrays(1, &vertexArrayObject);
-	glBindVertexArray(vertexArrayObject);
-
-	glGenBuffers(1, &vertexBufferObject);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-
-	glGenBuffers(1, &elementBufferObject);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObject);
 
 	// Compile vertex and fragment shaders
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -73,37 +62,17 @@ void init() {
 	glCompileShader(fragmentShader);
 
 	// Link shader program from vertex and fragment shader
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glBindFragDataLocation(shaderProgram, 0, "outColor");
-	glLinkProgram(shaderProgram);
-	glUseProgram(shaderProgram);
-
-	// Linking vertex data with attributes
-	GLint positionAttributes = glGetAttribLocation(shaderProgram, "position");
-	glEnableVertexAttribArray(positionAttributes);
-	glVertexAttribPointer(positionAttributes, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), 0); // Fifth argument is for values per vertex
-
-	GLint colorAttributes = glGetAttribLocation(shaderProgram, "color");
-	glEnableVertexAttribArray(colorAttributes);
-	glVertexAttribPointer(colorAttributes, 4, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(2*sizeof(float))); // Sixth argument is values to skip (x,y)
-
-	GLint textureAttributes = glGetAttribLocation(shaderProgram, "texcoord");
-	glEnableVertexAttribArray(textureAttributes);
-	glVertexAttribPointer(textureAttributes, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(6*sizeof(float)));
+	a_shaderProgram = glCreateProgram();
+	glAttachShader(a_shaderProgram, vertexShader);
+	glAttachShader(a_shaderProgram, fragmentShader);
+	glBindFragDataLocation(a_shaderProgram, 0, "outColor");
+	glLinkProgram(a_shaderProgram);
+	glUseProgram(a_shaderProgram);
 }
 
 void close() {
-	glDeleteTextures(1, &texture);
-	glDeleteProgram(shaderProgram);
-	glDeleteShader(fragmentShader);
-	glDeleteShader(vertexShader);
-	glDeleteBuffers(1, &elementBufferObject);
-	glDeleteBuffers(1, &vertexBufferObject);
-	glDeleteVertexArrays(1, &vertexArrayObject);
+	glDeleteProgram(a_shaderProgram);
 
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(a_window);
 	glfwTerminate();
 }
-

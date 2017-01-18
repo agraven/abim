@@ -10,10 +10,10 @@ class World {
 		virtual void update();
 		virtual void render();
 		Object* objlist_first;
+		point camera = {0, 0};
 		World();
 		virtual ~World();
 	private:
-		point camera = {0, 0};
 };
 
 #endif

@@ -7,26 +7,24 @@
 
 int main(int argc, char* argv[]) {
 	init();
-	World* world = new World();
-	world->object_add(new Object(2.0f, 2.0f, 20.0f, 20.0f, "splash.png"));
-	world->object_add(new Object(50.0f, 200.0f, 20.0f, 20.0f, "splash.png"));
+	a_world = new World();
+	a_world->object_add(new Object(2.0f, 2.0f, 200.0f, 394.0f, "splash.png"));
+	a_world->object_add(new Object(500.0f, 200.0f, -200.0f, 194.0f, "splash.png"));
 
 	// Main loop
-	while(!glfwWindowShouldClose(window)) {
-		world->update();
+	while(!glfwWindowShouldClose(a_window)) {
+		a_world->update();
+
 		// Rendering
 		glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		world->render();
+		a_world->render();
 
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(a_window);
 
 		// Event handling
 		glfwPollEvents();
-		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-			glfwSetWindowShouldClose(window, GL_TRUE);
-		}
 	}
 
 	close();

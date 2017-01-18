@@ -2,15 +2,15 @@
 #define CORE_H
 #include <GLFW/glfw3.h>
 #include <GL/glew.h>
+#include <world.h>
 
 extern float horz_pixel_step, vert_pixel_step;
 
-extern GLFWwindow* window;
-extern const GLFWvidmode* videomode;
-extern GLuint shaderProgram;
-extern GLuint vertexArrayObject;
-extern GLuint vertexBufferObject;
-extern GLuint elementBufferObject;
+extern GLFWwindow* a_window;
+extern const GLFWvidmode* a_videomode;
+extern GLuint a_shaderProgram;
+
+extern World* a_world;
 
 void init();
 void close();
