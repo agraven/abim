@@ -7,12 +7,9 @@ GLuint elements[] = {
 	0, 1, 2,
 	2, 3, 0
 };
-Object::Object(float x, float y, float width, float height, const char* texture_filename) {
-	this->x = x;
-	this->y = y;
-	this->width = width;
-	this->height = height;
-
+object* object_new(point origin, point_tex* point_list, unsigned int point_count, const char* texture_filename) {
+	// Allocate object
+	object* obj = malloc(sizeof(object));
 	// Store attribute links in vertex array object
 	glGenVertexArrays(1, &vertexArrayObject);
 	glBindVertexArray(vertexArrayObject);
@@ -27,18 +24,21 @@ Object::Object(float x, float y, float width, float height, const char* texture_
 	// Linking vertex data with attributes
 	GLint positionAttributes = glGetAttribLocation(a_shaderProgram, "position");
 	glEnableVertexAttribArray(positionAttributes);
-	glVertexAttribPointer(positionAttributes, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), 0); // Fifth argument is for values per vertex
+	// Fifth argument is for values per vertex
+	glVertexAttribPointer(positionAttributes, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), 0); 
 
 	GLint colorAttributes = glGetAttribLocation(a_shaderProgram, "color");
 	glEnableVertexAttribArray(colorAttributes);
-	glVertexAttribPointer(colorAttributes, 4, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(2*sizeof(float))); // Sixth argument is values to skip (x,y)
+	// Sixth argument is values to skip (x,y)
+	glVertexAttribPointer(colorAttributes, 4, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(2*sizeof(float)));
 
 	GLint textureAttributes = glGetAttribLocation(a_shaderProgram, "texcoord");
 	glEnableVertexAttribArray(textureAttributes);
 	glVertexAttribPointer(textureAttributes, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(6*sizeof(float)));
 
 	// Load texture
-	image_data = SOIL_load_image(texture_filename, &image_width, &image_height, 0, SOIL_LOAD_RGB);
+	int image_width, image_height;
+	unsigned char* image_data = SOIL_load_image(texture_filename, &image_width, &image_height, 0, SOIL_LOAD_RGB);
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -50,7 +50,11 @@ Object::Object(float x, float y, float width, float height, const char* texture_
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
-void Object::update() {
+object_destroy(object* o) {
+	glDeleteTextures(1, &texture);
+	glDeleteBuffers(1, &elementBufferObject);
+	glDeleteBuffers(1, &vertexBufferObject);
+	glDeleteVertexArrays(1, &vertexArrayObject);
 }
 void Object::render(point camera) {
 	float x1 = (x - camera.x) * horz_pixel_step - 1.0f;
@@ -66,13 +70,4 @@ void Object::render(point camera) {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glUseProgram(a_shaderProgram);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-}
-Object::~Object() {
-	glDeleteTextures(1, &texture);
-	glDeleteProgram(a_shaderProgram);
-	glDeleteShader(fragmentShader);
-	glDeleteShader(vertexShader);
-	glDeleteBuffers(1, &elementBufferObject);
-	glDeleteBuffers(1, &vertexBufferObject);
-	glDeleteVertexArrays(1, &vertexArrayObject);
 }

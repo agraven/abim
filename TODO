@@ -1,3 +1,4 @@
+* move away from C++ because it's inefficient and gross
 * fix/actually implement window-resizing
 * rework how textures are loaded, probably by implementing a key/value texture database
 * add wrapper function for handling filenames

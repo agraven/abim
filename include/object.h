@@ -3,24 +3,46 @@
 #include <GL/glew.h>
 #include "data-types.h"
 
-class Object {
-	public:
-		float x, y;
-		float width, height;
+/** Default object type 
+ * @origin: The base positional value 
+ * @point_list: A dynamic array of point_tex's which make up the objects
+ * collision boundary.
+ * @point_count: The number of point in the point_list
+ *
+ * The type for for physics-interactive, non-particle objects.
+ */
+typedef struct object object;
+struct {
+	point origin;
+	point_tex* point_list;
+	point point_count;
+	const char* texture_filename;
 
-		Object(float init_x, float init_y, float init_width, float init_height, const char* texture_filename);
-		Object* objlist_next = nullptr;
-		virtual void update();
-		virtual void render(point camera);
-		virtual ~Object();
-	private:
-		int image_width, image_height;
-		unsigned char* image_data;
-		GLuint fragmentShader, vertexShader;
-		GLuint texture;
-		GLuint vertexArrayObject;
-		GLuint vertexBufferObject;
-		GLuint elementBufferObject;
+	GLuint fragmentShader, vertexShader;
+	GLuint texture;
+	GLuint vertexArrayObject;
+	GLuint vertexBufferObject;
+	GLuint elementBufferObject;
+
+	object* objlist_next = nullptr;
 };
+
+/** Allocate new object
+ *
+ * Allocate an object to memory and return a pointer to it.
+ * Remember to object_destroy() it once it's no longer needed.
+ */
+object* object_new(
+	point origin,
+	point* point_list,
+	unsigned int point_count,
+	const char* texture_filename
+);
+
+/** Destroy an object
+ *
+ * Release an object from memory.
+ */
+void object_destroy(object* o);
 
 #endif
