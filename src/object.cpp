@@ -8,17 +8,21 @@ GLuint elements[] = {
 	2, 3, 0
 };
 object* object_new(point origin, point_tex* point_list, unsigned int point_count, const char* texture_filename) {
-	// Allocate object
+	// Allocate object and store variables in it
 	object* obj = malloc(sizeof(object));
+	obj->origin = origin;
+	obj->point_list = point_list;
+	obj->point_count = point_count
+
 	// Store attribute links in vertex array object
-	glGenVertexArrays(1, &vertexArrayObject);
-	glBindVertexArray(vertexArrayObject);
+	glGenVertexArrays(1, &obj->vertexArrayObject);
+	glBindVertexArray(obj->vertexArrayObject);
 
-	glGenBuffers(1, &vertexBufferObject);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+	glGenBuffers(1, &obj->vertexBufferObject);
+	glBindBuffer(GL_ARRAY_BUFFER, obj->vertexBufferObject);
 
-	glGenBuffers(1, &elementBufferObject);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObject);
+	glGenBuffers(1, &obj->elementBufferObject);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj->elementBufferObject);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 
 	// Linking vertex data with attributes
@@ -39,8 +43,8 @@ object* object_new(point origin, point_tex* point_list, unsigned int point_count
 	// Load texture
 	int image_width, image_height;
 	unsigned char* image_data = SOIL_load_image(texture_filename, &image_width, &image_height, 0, SOIL_LOAD_RGB);
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glGenTextures(1, &obj->texture);
+	glBindTexture(GL_TEXTURE_2D, obj->texture);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_width, image_height, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data);
 	glGenerateMipmap(GL_TEXTURE_2D);
@@ -50,11 +54,12 @@ object* object_new(point origin, point_tex* point_list, unsigned int point_count
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 }
-object_destroy(object* o) {
-	glDeleteTextures(1, &texture);
-	glDeleteBuffers(1, &elementBufferObject);
-	glDeleteBuffers(1, &vertexBufferObject);
-	glDeleteVertexArrays(1, &vertexArrayObject);
+object_destroy(object* obj) {
+	glDeleteTextures(1, &obj->texture);
+	glDeleteBuffers(1, &obj->elementBufferObject);
+	glDeleteBuffers(1, &obj->vertexBufferObject);
+	glDeleteVertexArrays(1, &obj->vertexArrayObject);
+	free(obj);
 }
 void Object::render(point camera) {
 	float x1 = (x - camera.x) * horz_pixel_step - 1.0f;

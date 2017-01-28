@@ -7,7 +7,7 @@
  * @origin: The base positional value 
  * @point_list: A dynamic array of point_tex's which make up the objects
  * collision boundary.
- * @point_count: The number of point in the point_list
+ * @point_count: The number of points in the point_list
  *
  * The type for for physics-interactive, non-particle objects.
  */
@@ -16,7 +16,6 @@ struct {
 	point origin;
 	point_tex* point_list;
 	point point_count;
-	const char* texture_filename;
 
 	GLuint fragmentShader, vertexShader;
 	GLuint texture;
@@ -24,7 +23,7 @@ struct {
 	GLuint vertexBufferObject;
 	GLuint elementBufferObject;
 
-	object* objlist_next = nullptr;
+	object* obj_next = nullptr;
 };
 
 /** Allocate new object
@@ -43,6 +42,6 @@ object* object_new(
  *
  * Release an object from memory.
  */
-void object_destroy(object* o);
+void object_destroy(object* obj);
 
 #endif

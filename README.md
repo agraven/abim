@@ -12,3 +12,7 @@ autoreconf
 ./configure
 make
 sudo make install
+```
+
+## Documentation
+A lot of header files feature doxygen-style comments. Actual doxygen support is to-be implemented.

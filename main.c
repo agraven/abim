@@ -7,8 +7,8 @@
 
 int main(int argc, char* argv[]) {
 	init();
-	a_world = new World();
-	a_world->object_add(new Object(2.0f, 2.0f, 200.0f, 394.0f, "splash.png"));
+	a_world = world_new();
+	a_world->object_add(object_new(2.0f, 2.0f, 200.0f, 394.0f, "splash.png"));
 	a_world->object_add(new Object(500.0f, 200.0f, -200.0f, 194.0f, "splash.png"));
 
 	// Main loop
