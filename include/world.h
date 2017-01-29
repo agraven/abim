@@ -31,8 +31,14 @@ void world_destroy(world* w);
 
 /** Add object to world
  *
- * Adds object o to world w's linked list of objects.
+ * Adds object obj to world w's linked list of objects.
  */
-int world_add_object(world* w, obj* o);
+int world_add_object(world* w, obj* obj);
+
+/** Remove object from world
+ *
+ * Removes object obj from world w's linked list of objects.
+ */
+int world_add_object(world* w, obj* obj);
 
 #endif

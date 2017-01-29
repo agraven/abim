@@ -59,7 +59,7 @@ object_destroy(object* obj) {
 	glDeleteBuffers(1, &obj->elementBufferObject);
 	glDeleteBuffers(1, &obj->vertexBufferObject);
 	glDeleteVertexArrays(1, &obj->vertexArrayObject);
-	free(obj);
+	a_free(obj);
 }
 void Object::render(point camera) {
 	float x1 = (x - camera.x) * horz_pixel_step - 1.0f;

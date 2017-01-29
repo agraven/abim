@@ -8,12 +8,18 @@
 int main(int argc, char* argv[]) {
 	init();
 	a_world = world_new();
-	a_world->object_add(object_new(2.0f, 2.0f, 200.0f, 394.0f, "splash.png"));
-	a_world->object_add(new Object(500.0f, 200.0f, -200.0f, 194.0f, "splash.png"));
+	point origin = {0.0f, 0.0f};
+	point_tex* pointlist = {
+		{1.0f, 1.0f, 0.0f, 0.0f},
+		{1.0f. 200.0f, 0.0f, 1.0f},
+		{200.0f, 200.0f, 1.0f, 1.0f},
+		{200.0f, 1.0f, 1.0f, 0.0f}
+	};
+
+	world_add_object(a_world, object_new(origin, pointlist, 4, "splash.png"));
 
 	// Main loop
 	while(!glfwWindowShouldClose(a_window)) {
-		a_world->update();
 
 		// Rendering
 		glClearColor(0.0f, 0.0f, 1.0f, 1.0f);

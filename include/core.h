@@ -10,7 +10,7 @@ extern GLFWwindow* a_window;
 extern const GLFWvidmode* a_videomode;
 extern GLuint a_shaderProgram;
 
-extern World* a_world;
+extern world* a_world;
 
 void init();
 void close();
