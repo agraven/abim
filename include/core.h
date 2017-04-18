@@ -4,13 +4,16 @@
 #include <GL/glew.h>
 #include <world.h>
 
+typedef struct {
+	GLFWwindow* window;
+	const GLFWvidmode* videomode;
+	World* world;
+	GLuint default_shader;
+} State;
+
+extern State* state;
+
 extern float horz_pixel_step, vert_pixel_step;
-
-extern GLFWwindow* a_window;
-extern const GLFWvidmode* a_videomode;
-extern GLuint a_shaderProgram;
-
-extern world* a_world;
 
 void init();
 void close();

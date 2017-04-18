@@ -1,8 +1,9 @@
 #ifndef DRAW_H
 #define DRAW_H
-#include "data-types.h"
+#include "world.h"
+#include "object.h"
 
-void draw_polygon(polygon* pol);
-void draw_object(object* obj);
+void draw_world(World* world);
+void draw_object(Object* object, World* world);
 
 #endif

@@ -3,28 +3,42 @@
 #include <GL/glew.h>
 #include "data-types.h"
 
-/** Default object type 
- * @origin: The base positional value 
- * @point_list: A dynamic array of point_tex's which make up the objects
- * collision boundary.
- * @point_count: The number of points in the point_list
- *
- * The type for for physics-interactive, non-particle objects.
- */
-typedef struct object object;
-struct {
-	point origin;
-	point_tex* point_list;
-	point point_count;
-
+typedef struct _object Object;
+struct _object {
+	Vector position, size;
 	GLuint fragmentShader, vertexShader;
 	GLuint texture;
 	GLuint vertexArrayObject;
 	GLuint vertexBufferObject;
 	GLuint elementBufferObject;
-
-	object* obj_next = nullptr;
+	Object* object_next;
 };
+
+Object* object_new(Vector position, Vector size, const char* texture_filename);
+
+void object_update(Object* object);
+
+void object_destroy(Object* object);
+
+/*class Object {
+	public:
+		float x, y;
+		float width, height;
+
+		Object(float init_x, float init_y, float init_width, float init_height, const char* texture_filename);
+		Object* objlist_next = nullptr;
+		virtual void update();
+		virtual void render(Vector camera);
+		virtual ~Object();
+	private:
+		int image_width, image_height;
+		unsigned char* image_data;
+		GLuint fragmentShader, vertexShader;
+		GLuint texture;
+		GLuint vertexArrayObject;
+		GLuint vertexBufferObject;
+		GLuint elementBufferObject;
+};*/
 
 /** Allocate new object
  *

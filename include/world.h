@@ -3,42 +3,29 @@
 #include "data-types.h"
 #include "object.h"
 
-/** World structure
- * @obj_first: The first instance in the linked list of the world's objects.
- * @camera: The position of the world's current rendering offset.
- *
- * An instance of a world state. Some software refers to this as a scene.
- */
 typedef struct {
-	object* obj_first;
-	point camera;
-} world;
+	Vector camera;
+	Object* object_first;
+} World;
 
-/** Allocate new world
- *
- * Return a pointer to a newly allocated world.
- */
-world* world_new();
+World* world_new();
 
-// TODO: world_new_from_name(const char* name);
+void world_prepend_object(World* world, Object* object);
+void world_append_object(World* world, Object* object);
 
-/** Destroy world
- *
- * Removes a world and all its member objects from memory.
- * TODO: Implement persistent objects that remain accross worlds.
- */
-void world_destroy(world* w);
+void world_remove_object(World* world, Object* object);
 
-/** Add object to world
- *
- * Adds object obj to world w's linked list of objects.
- */
-int world_add_object(world* w, obj* obj);
-
-/** Remove object from world
- *
- * Removes object obj from world w's linked list of objects.
- */
-int world_add_object(world* w, obj* obj);
+/*class World {
+	public:
+		void object_add(Object* object);
+		void object_remove(Object* object);
+		virtual void update();
+		virtual void render();
+		Object* objlist_first;
+		Vector camera = {0, 0};
+		World();
+		virtual ~World();
+	private:
+};*/
 
 #endif
