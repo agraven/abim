@@ -1,7 +1,7 @@
 AC_PREREQ([2.69])
 AC_INIT([ABIM Engine Prototype], [0.0.1], [amandapg@protonmail.com])
 AC_CONFIG_AUX_DIR([build-aux])
-AC_CONFIG_SRCDIR([main.cpp])
+AC_CONFIG_SRCDIR([src/world.cpp])
 AC_CONFIG_HEADERS([include/config.h])
 AM_INIT_AUTOMAKE([foreign subdir-objects -Wall -Werror -Wno-portability])
 
@@ -14,6 +14,7 @@ AC_PROG_RANLIB
 AC_CHECK_LIB([GL], [glClear])
 AC_CHECK_LIB([GLEW], [glewInit])
 AC_CHECK_LIB([glfw], [glfwGetVersionString])
+AC_SEARCH_LIBS([sincos], [m])
 
 # Checks for header files.
 AC_CHECK_HEADERS([memory.h])
