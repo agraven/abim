@@ -47,5 +47,6 @@ configure
 configure.scan
 .deps/
 .dirstamp
+stamp-h1
 Makefile
 Makefile.in
