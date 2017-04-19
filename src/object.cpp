@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "data-types.h"
 #include "core.h"
-GLuint elements[] = {
+static GLuint elements[] = {
 	0, 1, 2,
 	2, 3, 0
 };

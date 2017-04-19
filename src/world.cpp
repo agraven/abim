@@ -1,4 +1,6 @@
 #include "world.h"
+#include "config.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include "data-types.h"
 #include "object.h"
@@ -19,7 +21,7 @@ void world_prepend_object(World* world, Object* object) {
 
 void world_append_object(World* world, Object* object) {
 	// If first link is empty, just put the object there
-	if (world->object_first = NULL) {
+	if (world->object_first == NULL) {
 		world->object_first = object;
 		return;
 	}
@@ -33,8 +35,12 @@ void world_append_object(World* world, Object* object) {
 }
 
 void world_remove_object(World* world, Object* object) {
+	// Check if first object is empty, print warning if so
+	if (world->object_first == NULL) {
+		return;
+		fprintf(stderr, PACKAGE": ERROR: Object removal requested, but no objects allocated.\n");
+	}
 	// No need to traverse list if first object is matched
-	if (world->object_first == NULL) return;
 	if (world->object_first == object) {
 		world->object_first = world->object_first->object_next;
 		object_destroy(object);
@@ -92,28 +98,4 @@ int world_remove_object(world* w, object* obj) {
 	}
 }
 
-void world_destroy(world* w) {
-	if (obj_first != NULL) {
-		object* target;
-		while (obj_first->obj_next != NULL) {
-			target = obj_first->obj_next;
-			obj_first->obj_next = target->obj_next;
-			object_destroy(target);
-		}
-		object_destroy(obj_first);
-	}
-	a_free(w);
-}
-
-/*void World::update() {
-	if (objlist_first != nullptr) {
-		Object* index = objlist_first;
-		index->update();
-		while (index->objlist_next != nullptr) {
-			index = index->objlist_next;
-			index->update();
-		}
-	}
-}
-World::~World() {
-}*/
+*/

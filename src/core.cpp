@@ -11,15 +11,12 @@
 float horz_pixel_step, vert_pixel_step;
 State* state;
 
-GLuint fragmentShader, vertexShader;
-GLuint a_shaderProgram;
-
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
      if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) /*world_remove_object(state->world, state->world->object_first);*/ state->world->object_first->position.x += 100;
 }
 
 void window_size_callback(GLFWwindow* window, int width, int height) {
-	glfwSetWindowSize(window, width, height);
+	//glfwSetWindowSize(window, width, height);
 }
 
 void init() {
@@ -51,6 +48,7 @@ void init() {
 	state->videomode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
 	// Compile vertex and fragment shaders
+	GLuint fragmentShader, vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertex_shader_src, NULL);
 	glCompileShader(vertexShader);
